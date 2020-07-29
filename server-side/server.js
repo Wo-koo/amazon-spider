@@ -12,6 +12,7 @@ const search = require("../src/router/api/search");
 
 app.use(search);
 app.use(history());
+app.use('/',express.static(path.join(__dirname,'/client/dist/')));
 
 //connect to mongodb 网络不稳定，建议搭建本地的mongobd
 mongoose.connect(dbConfig.mongoUrl)

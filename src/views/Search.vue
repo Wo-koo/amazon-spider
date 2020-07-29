@@ -21,7 +21,7 @@ export default {
       console.log(searchTxt);
 
       this.$http
-        .post("/search/", this.model)
+        .post("search/", this.model)
         .then(function (response) {
           console.log(response);
         })
