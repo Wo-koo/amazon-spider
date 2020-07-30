@@ -8,9 +8,8 @@ const history = require('connect-history-api-fallback');
 
 const app = express();
 
-const search = require("../src/router/api/search");
+const search = require("./routers/api/search");
 
-app.use(search);
 app.use(history());
 app.use('/',express.static(path.join(__dirname,'/client/dist/')));
 
@@ -21,7 +20,7 @@ mongoose.connect(dbConfig.mongoUrl)
 
 // 将express与vue-crl生成的文件进行配合使用
 console.log(__dirname);//__dirname是获取当前路径
-app.use('/',express.static(path.join(__dirname,'/client/dist/')));
+app.use('/',express.static(path.join(__dirname,'../dist/')));
 
 // 使用body-parser的中间件
 app.use(bodyParser.urlencoded({extended:false}))//这个地方有点搞不懂，为什么要设置extended:false;
@@ -32,6 +31,7 @@ app.get('/',(req,res)=>{
     res.send("Holle idoit");
 });
 
+app.use(search);
 const port = process.env.port || 3000;
 
 app.listen(port,()=>{
