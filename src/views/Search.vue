@@ -17,11 +17,9 @@ export default {
   methods: {
     DoSearch() {
       // do search action to pass the search key words to the express serve.
-      var searchTxt = this.model;
-      console.log(searchTxt);
 
       this.$http
-        .get("search/", this.model)
+        .get(`search/${this.model.searchText}`)
         .then(function (response) {
           console.log(response);
         })

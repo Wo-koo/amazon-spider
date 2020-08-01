@@ -2,17 +2,45 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const cheerio = require("cheerio");
+const Goods = require("../../module/goods");
 
-router.get("/client/search",(req,res)=>{
-    console.log("client/search's req = " + req);
-    axios.get(`https://www.amazon.cn/s?k=${req.searchText}`).then(function(res){
+router.get("/client/search/:searchText",(req,res)=>{
+    console.log("client/search's req = " + req.params.searchText);
+    axios.get(`https://www.amazon.cn/s?k=${req.params.searchText}`).then(function(res){
         var $ = cheerio.load(res.data);
-        console.log($('#price').text)
+        $('.s-result-item',".sg-col-inner").map(function(index,ele){
+            var tags = $("h2 span",this).text();
+            var price = $("a-price",this).text();
+
+            tags.split(' ').forEach(function(value,index,source){
+                Goods.findOne({GoodsName:req.params.searchText,Tag:value}).then(goods=>{
+                    if (goods) {
+                        goods.TagAppearanceCounts++;
+                        goods.save().then(()=>{})
+                        .catch(err=>console.error(err)); ;
+                    }else if (value) {
+                            var newGoodsTag = new Goods({
+                                GoodsName:req.params.searchText,
+                                price:price,
+                                Tag:value,
+                                TagAppearanceCounts:0
+                            });
+                            newGoodsTag.save().then(()=>{})
+                            .catch(err=>console.error(err));
+                    }                   
+                });
+            });
+         });
+
+        // next page if href is not undefined
+        var nextPageUrl = $(".a-selected",".a-pagination").next('.a-normal').children('a').attr("href");
+        console.log(`nextPageUrl = ${nextPageUrl}`);
     }).catch(function(error){
         console.log(error)
     }).finally(function(){
         // always do
     })
+    return res.status(200).json({msg:"查询成功"});
 });
 
 router.get("/client/searchResult",(req,res)=>{
