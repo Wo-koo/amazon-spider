@@ -9,7 +9,7 @@ const GoodsSchema = new Schema({
         required:true,
     },
     price:{
-        type:Number,
+        type:String,
         require:false,
     },
     Tag:{
