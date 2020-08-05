@@ -15,10 +15,11 @@ const GoodsSchema = new Schema({
     Tag:{
         type:String,
         required:true,
+        
     },
-    TagAppearanceCounts:{
+    Counts:{
         type:Number,
-        require:true,
+        require:false,
         default:0,
     }
 })
