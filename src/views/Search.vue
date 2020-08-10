@@ -1,8 +1,5 @@
 <template>
 <div> 
-  <div class="icon">
-    
-  </div>
   <div class="searchForm" id="search">
     <el-input class="searchText" v-model="model.searchText" placeholder="请输入要检索的商品名称"></el-input>
     <el-button class="searchButton" type="primary" icon="el-icon-search" @click.prevent="DoSearch"></el-button>

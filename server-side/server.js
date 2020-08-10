@@ -9,6 +9,7 @@ const history = require('connect-history-api-fallback');
 const app = express();
 
 const search = require("./routers/api/search");
+const searchHistory = require("./routers/api/searchHistory")
 
 app.use(history());
 app.use('/',express.static(path.join(__dirname,'/client/dist/')));
@@ -32,6 +33,8 @@ app.get('/',(req,res)=>{
 });
 
 app.use(search);
+app.use(searchHistory);
+
 const port = process.env.port || 3000;
 
 app.listen(port,()=>{
